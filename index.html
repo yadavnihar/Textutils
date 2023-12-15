@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TextUtils.com</title>
+  <style>
+    .btn {
+      background: linear-gradient(to right,
+      RGB(135, 206, 235),
+          RGB(254, 182, 193));
+      color: RGB(51, 51, 51);
+    }
+
+    #TextBox {
+      border: 2px solid RGB(254, 182, 193);
+    }
+
+    .textt {
+      color: RGB(0, 0, 128);
+       
+    }
+
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">TextUtils</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="mb-3">
+      <h1 class="my-3 textt">Enter Text Below</h1>
+      <textarea class="form-control" id="TextBox" rows="10" placeholder="Enter text here..."></textarea>
+    </div>
+    <button class="btn btn-light upper my-2 mx-1" title="Convert all Text into the UpperCase">
+      Convert to upper Case
+    </button>
+    <button class="btn btn-light lower my-2 mx-1" title="Convert all Text into the LowerCase">
+      Convert to Lower Case
+    </button>
+    <button class="btn btn-light capital my-2 mx-1" title="for capitalize Text">
+      Capital First letter
+    </button>
+    <button class="btn btn-light">Remove Extra Space</button>
+    <button class="btn btn-light">Clear Text</button>
+    <button class="btn btn-light" id="selectTextBtn">Select All</button>
+    <!-- <button class="btn btn-light">Undo</button> -->
+  </div>
+
+  <script>
+    let upper = document.body.getElementsByClassName("btn")[0];
+    let lower = document.body.getElementsByClassName("btn")[1];
+    let capital = document.body.getElementsByClassName("btn")[2];
+    let cleartext = document.body.getElementsByClassName("btn")[4];
+    let removeSpaces = document.body.getElementsByClassName("btn")[3];
+    let undoButton = document.body.getElementsByClassName("btn")[5];
+    let selectTextBtn = document.getElementById("selectTextBtn");
+    var z = document.getElementById("TextBox");
+
+    let textHistory = [];
+
+    let currentHistoryIndex = -1;
+
+    function updateHistory() {
+      textHistory.push(z.value);
+      currentHistoryIndex = textHistory.length - 1;
+    }
+
+    upper.onclick = function () {
+      z.style.color = "RGB(0, 0, 128)";
+      updateHistory();
+      z.value = z.value.toLocaleUpperCase();
+    };
+
+    lower.onclick = function () {
+      z.style.color = "RGB(0, 0, 128)";
+      updateHistory();
+      z.value = z.value.toLocaleLowerCase();
+    };
+
+    capital.onclick = function () {
+      z.style.color = "RGB(0, 0, 128)";
+      updateHistory();
+      const mySentence = z.value;
+      let words = mySentence.toLowerCase().split(" ");
+      for (let i = 0; i < words.length; i++) {
+        if (words[i]) {
+          words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+        }
+      }
+      words = words.join(" ");
+      z.value = words;
+    };
+
+    cleartext.onclick = function () {
+      if (confirm("Are you sure you want to delete all text?")) {
+        updateHistory();
+        z.value = "";
+      }
+    };
+
+    removeSpaces.onclick = function () {
+      if (confirm("Do not use this tool on a paragraph. Continue?")) {
+        updateHistory();
+        const inputValue = z.value;
+        const trimmedValue = inputValue.replace(/\s+/g, " ");
+        z.value = trimmedValue;
+      }
+    };
+
+    undoButton.onclick = function () {
+      if (currentHistoryIndex > 0) {
+        currentHistoryIndex--;
+        z.value = textHistory[currentHistoryIndex];
+      }
+    };
+
+    //select
+
+    selectTextBtn.onclick = function () {
+      selectText();
+    };
+
+    function selectText() {
+      z.select();
+      document.execCommand("copy");
+    }
+
+    document.addEventListener("keydown", function (event) {
+      if (event.ctrlKey && event.key === "z") {
+        undoButton.click();
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
+
