@@ -60,10 +60,11 @@
         <button class="btn btn-light remove">Remove Extra Space</button>
         <button class="btn btn-light clear">Clear Text</button>
         <button class="btn btn-light undo">Undo</button>
+        <button class="btn btn-light " id="copytext">Copy Text</button>
 
         <h4>About Text</h4>
         <h5 id="message" > -- </h5>
-        <!-- <h5> largest word smallest word </h5> -->
+        <h5 id="size" > largest word smallest word </h5>
     </div>
 
     <script>
@@ -76,6 +77,15 @@
         let selectTextBtn = document.getElementById("selectTextBtn");
         var z = document.getElementById("TextBox");
         let message = document.getElementById("message")
+        let copytext = document.getElementById("copytext")
+        let size = document.getElementById("size")
+
+        
+        // console.log(3 + '4' - '2' + 1 )
+
+
+
+
 
         // console.log(message)
 
@@ -87,6 +97,9 @@
             // console.log( textspeartion.length)
             if(z.value.length > 1){
                 message.innerHTML = "Total Words:- " + textspeartion.length
+            }
+            else{
+                message.innerHTML = ""
             }
             // console.log("hello")
 
@@ -105,6 +118,15 @@
             z.style.color = "RGB(0, 0, 128)";
             updateHistory();
             z.value = z.value.toLocaleUpperCase();
+        };
+
+
+        copytext.onclick = function () {
+            
+                  z.select();
+                  // dataInput.setSelectionRange(0, 99999); 
+                  document.execCommand("copy");
+                  // dataInput.setSelectionRange(0, 0);
         };
 
         lower.onclick = function () {
@@ -136,12 +158,12 @@
         };
 
         removeSpaces.onclick = function () {
-            if (confirm("Do not use this tool on a paragraph. Continue?")) {
+            // if (confirm("Do not use this tool on a paragraph. Continue?")) {
                 updateHistory();
                 const inputValue = z.value;
                 const trimmedValue = inputValue.replace(/\s+/g, " ");
                 z.value = trimmedValue;
-            }
+            // }
         };
 
         undoButton.onclick = function () {
