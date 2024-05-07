@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TextUtils.com</title>
     <style>
+
+
+
+
         .btn {
             background: linear-gradient(to right, RGB(135, 206, 235), RGB(254, 182, 193));
             color: RGB(51, 51, 51);
@@ -49,22 +53,34 @@
     <div class="container">
         <div class="mb-3">
             <h1 class="my-3 textt">Enter Text Below</h1>
-            <textarea class="form-control" id="TextBox" rows="10" oninput="inputfunction()" placeholder="Enter text here..."></textarea>
+            <textarea class="form-control" id="TextBox" spellcheck="true"  autofocus rows="10" oninput="inputfunction()" placeholder="Enter text here..."></textarea>
+            <p id="message" ></p>
         </div>
 
 
         <button class="btn btn-light upper my-2 mx-1" title="Convert all Text into the UpperCase">Convert to upper Case</button>
         <button class="btn btn-light capital my-2 mx-1" title="Only for single paragraph">Capital First letter</button>
         <button class="btn btn-light lower my-2 mx-1 " title="Convert all Text into the LowerCase">Convert to Lower Case</button>
-        <button class="btn btn-light" id="selectTextBtn">Select All</button>
         <button class="btn btn-light remove">Remove Extra Space</button>
-        <button class="btn btn-light clear">Clear Text</button>
-        <button class="btn btn-light undo">Undo</button>
-        <button class="btn btn-light " id="copytext">Copy Text</button>
 
-        <h4>About Text</h4>
-        <h5 id="message" > -- </h5>
-        <h5 id="size" > largest word smallest word </h5>
+        <button class="btn btn-light extractNum">Extract Numbers</button>
+        <button class="btn btn-light extractTxt">Extract Text</button>
+        <button class="btn btn-light removeSpcl">Remove Special Charcters</button>
+        <button class="btn btn-light copy">Copy to clipboard</button>
+        <button class="btn btn-light paste">Paste From Clipboard</button>
+        <button class="btn btn-light reverse">Reverse Text</button>
+
+        <button class="btn btn-light clear">Clear Text</button>
+        <!-- <button class="btn btn-light undo" disabled title="upcmoing" >Undo</button> -->
+
+        <!-- <h2> Text Summary</h4>
+
+        <p>2 words, 28 characters, 1 statements, 25 questions, 0 exclamations.</p>
+        <p>0.16 Minutes read</p>
+
+        <h2>Preview</h2>
+        <p></p> -->
+       
     </div>
 
     <script>
@@ -74,34 +90,122 @@
         let cleartext = document.body.getElementsByClassName("clear")[0];
         let removeSpaces = document.body.getElementsByClassName("remove")[0];
         let undoButton = document.body.getElementsByClassName("undo")[0];
-        let selectTextBtn = document.getElementById("selectTextBtn");
-        var z = document.getElementById("TextBox");
+        
+        let extractnum = document.getElementsByClassName("extractNum")[0]
+        let extracttxt = document.getElementsByClassName("extractTxt")[0]
+        let removeSpcl = document.getElementsByClassName("removeSpcl")[0]
+        let copy = document.getElementsByClassName("copy")[0]
+        let paste = document.getElementsByClassName("paste")[0]
+        let reverse = document.getElementsByClassName("reverse")[0]
+
         let message = document.getElementById("message")
-        let copytext = document.getElementById("copytext")
-        let size = document.getElementById("size")
+
+
+
+        var z = document.getElementById("TextBox");
 
         
-        // console.log(3 + '4' - '2' + 1 )
+    extractnum.onclick = function () {
+    // let inputText = z.value;
+    let numbers = z.value.match(/\d+/g); 
+    
+            if (numbers) {
+                let extractedNumbers = numbers.join(""); 
+                z.value = extractedNumbers
+            } else {
+                message.style.color = "red"
+                message.innerHTML = "No numbers found in the input text."
+
+                setTimeout(() => {
+                    message.innerHTML = ""
+                }, 1100);
+            }
+        };
 
 
-
-
-
-        // console.log(message)
-
-
-
-        function inputfunction(e){
-            // console.log(z.value)
-            let textspeartion = z.value.split(" ").filter(String)
-            // console.log( textspeartion.length)
-            if(z.value.length > 1){
-                message.innerHTML = "Total Words:- " + textspeartion.length
+        extracttxt.onclick = function () {
+            let input = z.value
+            let textmatch = input.match(/[a-zA-Z]+/g); 
+            if(textmatch){
+                let text = textmatch.join(" ")
+                z.value = text
             }
             else{
-                message.innerHTML = ""
+                message.style.color = "red"
+                message.innerHTML = "Text Not found in the input text."
+                z.value = ""
+
+                setTimeout(() => {
+                    message.innerHTML = ""
+                }, 1100);
+
             }
-            // console.log("hello")
+   
+            
+        };
+
+       
+
+        removeSpcl.onclick = function () {
+            let a = z.value.replace(/[^\w\s]/gi, ''); // Remove all special characters
+            //  z.value = a
+            if(a){
+               
+                z.value = a
+            }
+            else{
+                message.style.color = "red"
+                message.innerHTML = "Special Charcters not found."
+                z.value = ""
+
+                setTimeout(() => {
+                    message.innerHTML = ""
+                }, 1100);
+
+            }
+
+        };
+
+        copy.onclick = function () {
+            z.select();
+            document.execCommand("copy");
+        };
+
+        paste.onclick = function () {
+            
+            navigator.clipboard.readText()
+        .then(text => {
+            var z = document.getElementById("TextBox");
+ 
+            z.value = text;
+        })
+        .catch(err => {
+            console.error('Failed to read clipboard contents: ', err);
+        });
+
+
+
+
+
+        };
+
+        reverse.onclick = function () {
+            let a = z.value;
+             let b = a.split("").reverse().join(""); 
+             z.value = b;
+        };
+        
+        
+        
+        
+        function inputfunction(e){
+                       
+            let textspeartion = z.value.split(" ").filter(String)
+            
+            // if(z.value.length > 2){
+            //     message.innerHTML = "Total Words:- " + textspeartion.length
+            // }
+           
 
         }
 
@@ -118,15 +222,6 @@
             z.style.color = "RGB(0, 0, 128)";
             updateHistory();
             z.value = z.value.toLocaleUpperCase();
-        };
-
-
-        copytext.onclick = function () {
-            
-                  z.select();
-                  // dataInput.setSelectionRange(0, 99999); 
-                  document.execCommand("copy");
-                  // dataInput.setSelectionRange(0, 0);
         };
 
         lower.onclick = function () {
@@ -175,14 +270,11 @@
 
         //select
 
-        selectTextBtn.onclick = function () {
-            selectText();
-        };
+        // selectTextBtn.onclick = function () {
+        //     selectText();
+        // };
 
-        function selectText() {
-            z.select();
-            document.execCommand("copy");
-        }
+       
 
         document.addEventListener("keydown", function (event) {
             if (event.ctrlKey && event.key === "z") {
